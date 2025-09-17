@@ -1,33 +1,22 @@
-import Message from "./Message";
-import { doc, onSnapshot } from "firebase/firestore";
+import userImage from '../img/capybara-square-1.jpg.optimal.jpg'
 import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
-import { db } from "../firebase";
-
-const Messages = () =>{
-    const [messages, setMessages] = useState([]);
-    const { data } = useContext(ChatContext);
-
-    useEffect(()=>{
-        const unSub = onSnapshot(doc(db,"chats", data.chatId), (doc)=>{
-            doc.exists() && setMessages(doc.data().messages);
-        });
-
-        //cleanup
-        return ()=>{
-            unSub()
-        }
-    },[data.chatId])
-
+const Message = ({message}) =>{
+    const {currentUser} = useContext(AuthContext);
+    const {data} = useContext(ChatContext);
     return(
-        <div className='messages'>
-            {messages.map((m) =>(
+        <div className='message owner'>
+            <div className='messageInfo'>
+                <img src={userImage} alt=""></img>
+                <span>just now</span>
+                </div>
+                <div className='messageContent'>
+                    <p>hello</p>
+                    <img src={userImage} alt="" />
+                </div>
+            </div>
+    )
+}
 
-                <Message message={m} key={m.id}/>
-            ))}
-
-        </div>
-    );
-};
-
-export default Messages
+export default Message
