@@ -55,7 +55,30 @@ const Message = ({message}) =>{
                 <div className='messageContent'>
                     {message.text && <p>{message.text}</p>}
                     {message.img && <img src={message.img} alt="" />}
-                </div>
+                     {/* Attached file (inside bubble) */}
+  {message.file && (
+    <div className="fileAttachment">
+      {/* Show file name with 📎 icon */}
+      <a
+        href={message.file.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fileName"
+      >
+        <span role="img" aria-label="file">📎</span> {message.file.name}
+      </a>
+
+      {/* Show image preview if it's an image file */}
+      {message.file.type.startsWith("image/") && (
+        <img
+          src={message.file.url}
+          alt={message.file.name}
+          className="fileImagePreview"
+        />
+      )}
+    </div>
+  )}
+</div>
             </div>
     );
 };
