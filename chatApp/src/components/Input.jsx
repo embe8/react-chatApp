@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
-import Img from "../img/img.png";
-import Attach from "../img/attach.png";
+import Img from "../img/attach_image.png";
+import Attach from "../img/attach_file.png";
+import Emoji from "../img/emoji_icon.png"
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import {
@@ -17,14 +18,34 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import EmojiPicker from "emoji-picker-react";
+import { useEffect } from "react";
+
+
 
 const Input = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
   const [file, setFile] = useState(null); // NEW: track regular file
+  const [showPicker, setShowPicker] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
+
+  useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") {
+      setShowPicker(false);
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, []);
+
 
   const handleSend = async () => {
     const messageId = uuid();
@@ -100,6 +121,28 @@ const Input = () => {
         value={text}
       />
       <div className="send">
+      
+  {showPicker && (
+    <div style={{ position: 'relative', bottom: '60px', right: '0' , zIndex: 10}}>
+      <EmojiPicker
+        onEmojiClick={(emojiObject, event) =>
+          setText(prev => prev + emojiObject.emoji)
+        }
+      />
+    </div>
+  )}
+
+        {/* Emoji Input (Emoji Mart/Emoji Picker)) */}
+        <input
+          type="emoji"
+          id="emoji"
+          style={{ display: "none" }}
+          onClick={() => setShowPicker(!showPicker)}
+        />
+        <label htmlFor="emoji">
+          <img src={Emoji} alt="Add emoji" />
+        </label>
+
         {/* File Input (for non-image files) */}
         <input
           type="file"
