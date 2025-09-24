@@ -2,6 +2,8 @@ import userImage from '../img/capybara-square-1.jpg.optimal.jpg'
 import React, { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
+import Attach from "../img/attach_file2.png";
+
 
 function formatTimestamp(timestamp) {
   if (!timestamp) return "";
@@ -65,7 +67,10 @@ const Message = ({message}) =>{
         rel="noopener noreferrer"
         className="fileName"
       >
-        <span role="img" aria-label="file">📎</span> {message.file.name}
+       <span role="img" aria-label="file">
+          <img src={Attach} alt="Attached image" style={{ height: "20px", width: "20px", marginRight: "5px" }} />
+          <span style={{ color: "#5c413f" }}>{message.file.name}</span>
+        </span>
       </a>
 
       {/* Show image preview if it's an image file */}
