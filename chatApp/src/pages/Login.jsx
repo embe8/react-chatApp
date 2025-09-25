@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import Capy from "../img/capy_logo.png";
+
 
 const Login = () => {
   const [err, setErr] = useState(false);
@@ -22,7 +24,9 @@ const Login = () => {
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <span className="logo">CapyChat</span>
+        <span className="logo">   {/*for logo image:} <span role="img" aria-label="file">
+                  <img src={Capy} alt="Attached image" style={{ height: "60px", width: "60px", marginRight: "5px" }} />
+                </span>*/}CapyChat</span>
         <span className="title">Login</span>
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="email" />
