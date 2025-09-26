@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import Add from "../img/addAvatar.png";
+import Add from "../img/attach_image.png";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, query, doc, where, setDoc, getDocs } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
-
-
 
 const Register = () => {
   const [err, setErr] = useState(false);
@@ -14,15 +12,63 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    setLoading(true);
+    setErr(false);
+    setLoading(false);
     e.preventDefault();
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
     const file = e.target[3].files[0];
 
+    // check if display name inputted already exists
+      const qDisplayName = query(
+        collection(db, "users"),
+        where("displayName", "==", displayName)
+      );
+      // check if email address is already registered
+      const qEmail = query(
+        collection(db, "users"),
+        where("email", "==", email)
+      );
+
+
     try {
-      //Create user
+
+      // check query results, place each query in an array
+      const [displayNameSnap, emailSnap] = await Promise.all([
+          getDocs(qDisplayName),
+          getDocs(qEmail),
+      ]);
+      //const querySnapshot = await getDocs(qDisplayName);
+
+
+      // match found alert user that name exists
+          if (!displayNameSnap.empty) 
+          {
+            setErr("Display name already taken");
+            console.log("Display name taken"); // Display error message
+            setLoading(false);
+            return; // abort account creation
+          }
+          // match found alert user that email already registered
+          if (!emailSnap.empty) 
+          {
+            setErr("Email already registered"); // Display error message
+            console.log("Email taken");
+            setLoading(false);
+            return; // abort account creation
+          }
+          if(!file)
+          {
+            setErr("Add an avatar"); 
+            setLoading(false);
+            return;
+          }
+          else{ setLoading(true); }
+
+
+      //Create user if no match found
+
       const res = await createUserWithEmailAndPassword(auth, email, password);
 
       //Create a unique image name
@@ -50,13 +96,13 @@ const Register = () => {
             navigate("/");
           } catch (err) {
             console.log(err);
-            setErr(true);
+            setErr("Something went wrong");
             setLoading(false);
           }
         });
       });
     } catch (err) {
-      setErr(true);
+      console.error(err)
       setLoading(false);
     }
   };
@@ -70,17 +116,17 @@ const Register = () => {
           <input required type="text" placeholder="display name" />
           <input required type="email" placeholder="email" />
           <input required type="password" placeholder="password" />
-          <input required style={{ display: "none" }} type="file" id="file" />
+          <input style={{ display: "none" }} type="file" id="file" />
           <label htmlFor="file">
             <img src={Add} alt="" />
             <span>Add an avatar</span>
           </label>
           <button disabled={loading}>Sign up</button>
+          {err && <span>{err}</span>}
           {loading && "Uploading and compressing the image please wait..."}
-          {err && <span>Something went wrong</span>}
         </form>
         <p>
-          You do have an account? <Link to="/register">Login</Link>
+          Have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
