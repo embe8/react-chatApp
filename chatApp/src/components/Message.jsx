@@ -1,14 +1,15 @@
 import userImage from '../img/capybara-square-1.jpg.optimal.jpg'
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState} from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import Attach from "../img/attach_file2.png";
-
+import { Image } from '@imagekit/react';
+import { IMAGEKIT_CONFIG, extractFirebasePath, IMAGE_TRANSFORMATIONS } from '../config/imagekit';
 
 function formatTimestamp(timestamp) {
   if (!timestamp) return "";
 
-  const messageDate = timestamp.toDate(); // Firestore Timestamp -> JS Date
+  const messageDate = timestamp.toDate();
   const now = new Date();
   const diffMs = now - messageDate;
   const diffMinutes = Math.floor(diffMs / 60000);
@@ -43,50 +44,83 @@ const Message = ({message}) =>{
 
     const ref = useRef();
 
+    const [enlargedImage, setEnlargedImage] = useState(null);
+
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: "smooth"});
     }, [message]);
+
     return(
         <div 
         ref={ref}
         className={`message ${message.senderId === currentUser.uid && "owner"}`}>
             <div className='messageInfo'>
-                <img src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL} alt=""></img>
+                <Image
+                  urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
+                  src={
+                    extractFirebasePath(
+                      (message.senderId === currentUser.uid
+                        ? currentUser.photoURL
+                        : data.user.photoURL) || 'img/capybara-square-1.jpg'
+                    )
+                  }
+                  transformation={[IMAGE_TRANSFORMATIONS.avatar]}
+                  alt="User avatar"
+                />
                 <span>{formatTimestamp(message?.date)}</span>
-                </div>
-                <div className='messageContent'>
-                    {message.text && <p>{message.text}</p>}
-                    {message.img && <img src={message.img} alt="" />}
-                     {/* Attached file (inside bubble) */}
-  {message.file && (
-    <div className="fileAttachment">
-      {/* Show file name with 📎 icon */}
-      <a
-        href={message.file.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fileName"
-      >
-       <span role="img" aria-label="file">
-          <img src={Attach} alt="Attached image" style={{ height: "20px", width: "20px", marginRight: "5px" }} />
-          <span style={{ color: "#5c413f" }}>{message.file.name}</span>
-        </span>
-      </a>
-
-      {/* Show image preview if it's an image file */}
-      {message.file.type.startsWith("image/") && (
-        <img
-          src={message.file.url}
-          alt={message.file.name}
-          className="fileImagePreview"
-        />
-      )}
-    </div>
-  )}
-</div>
             </div>
+            <div className='messageContent'>
+                {message.text && <p>{message.text}</p>}
+                {message.img && (
+                  <Image
+                    urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
+                    src={extractFirebasePath(message.img)}
+                    transformation={[IMAGE_TRANSFORMATIONS.messageImage]}
+                    alt="Chat image"
+                    className="clickableImage"
+                    onClick={() => setEnlargedImage(extractFirebasePath(message.img))}// click handler to enlarge image
+                  />
+                )}
+
+                {/* Attached file */}
+                {message.file && (
+                  <div className="fileAttachment">
+                    <a
+                      href={message.file.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="fileName"
+                    >
+                      <span role="img" aria-label="file">
+                        <img src={Attach} alt="Attached image" style={{ height: "20px", width: "20px", marginRight: "5px" }} />
+                        <span style={{ color: "#5c413f" }}>{message.file.name}</span>
+                      </span>
+                    </a>
+       
+                    {/* Show image preview if it's an image file */}
+                    {message.file.type.startsWith("image/") && (
+                      <Image
+                        urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
+                        src={extractFirebasePath(message.file.url)}
+                        transformation={[IMAGE_TRANSFORMATIONS.filePreview]}
+                        alt={message.file.name}
+                        className="fileImagePreview"
+                      />
+                    )}
+
+                  </div>
+                )}
+            </div>
+                         {enlargedImage && (
+                      <div
+                      className="imageModal"
+                      onClick={() => setEnlargedImage(null)}
+                      >
+                        <img src={enlargedImage} alt="Enlarged image" />
+                      </div>
+                    )}
+        </div>
     );
 };
 
 export default Message;
-
