@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 @mixin mobile{
     @media screen and (max-width:480px){
         @content;
@@ -23,7 +25,8 @@ $darColor: #2f2d52;
 
 
 .formContainer{
-    background-color: #a7bcff;
+    
+    background-color: #d1ebd3;
     height: 100vh;
     display: flex;
     align-items: center;
@@ -40,13 +43,13 @@ $darColor: #2f2d52;
     
 
         .logo{
-            color: #5d5b8d;
+            color: #5c413f;
             font-weight: bold;
             font-size: 24px;
         }
 
         .title{
-            color: #5d5b8d;
+            color: #9e6f6d;
             font-size: 12px;
         }
 
@@ -60,14 +63,14 @@ $darColor: #2f2d52;
             padding: 15px;
             border: none;
             width: 250px;
-            border-bottom: 1px solid #a7bcff;
+            border-bottom: 1px solid #9e6f6d;
         &::placeholder{
             color: rgb(175, 175, 175)
             }
         }
 
         button{
-            background-color: #7b96ec;
+            background-color: #e9c695fe;
             color: white;
             padding: 10px;
             font-weight: bold;
@@ -79,7 +82,7 @@ $darColor: #2f2d52;
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #8da4f1;
+            color: #9e6f6d;
             font-size: 12px;
             cursor: pointer;
         }
@@ -90,17 +93,27 @@ $darColor: #2f2d52;
 
     }
     p{
-        color:#5d5b8d;
+        color:#9e6f6d;
         font-size: 12px;
         margin-top: 10px;
 
+        a{
+            color: #5c413f;
+            text-decoration: none;
+        
+
+        &:hover {
+            text-decoration: underline;
+            color: #8b5c4a;
+        }
+    }
     }
 
     }
 }
 
 .home{
-    background-color: #a7bcff;
+    background-color: #fff7e7;
     height: 100vh;
     display: flex;
     align-items: center;
@@ -118,17 +131,22 @@ $darColor: #2f2d52;
         }
 
         .sidebar{flex: 1;
-        background-color: #3e3c61;
+        background-color: #d1ebd3;
         position: relative;
+        overflow-y: auto;
+        max-height: 100%;
+        scroll-behavior: smooth;
+
     
         .navbar{
             display:flex;
             align-items: center;
-            background-color: #2f2d52;
+            background-color: #b8d8be;
             height: 50px;
             padding: 10px;
             justify-content: space-between;
-            color: #ddddf7;
+            color: #5c413f;
+;
 
             .logo{
                 font-weight: bold;
@@ -150,8 +168,8 @@ $darColor: #2f2d52;
                 }
 
                 button{
-                    background-color: #5d5b8d;
-                    color: #ddddf7;
+                    background-color: #e9c695fe;
+                    color: white;
                     font-size: 10px;
                     border: None;
                     cursor: pointer;
@@ -189,11 +207,11 @@ $darColor: #2f2d52;
                     display: flex;
                     align-items: center;
                     gap: 10px;
-                    color: white;
+                    color: #5c413f;
                     cursor: pointer;
 
                     &:hover{
-                        background-color: #2f2d52;
+                    background-color: #e0f0e3;
                     }
                     img{
                         width: 50px;
@@ -203,19 +221,51 @@ $darColor: #2f2d52;
             }
             .userChatInfo{
                 span{font-size: 18px; font-weight: 500}
-                p{font-size: 14px; color: lightgray}
+                p{font-size: 14px; color: #9e6f6d}
             }
         }
         }
         .chat{flex: 2;
+            .EmojiPickerReact .epr-category-nav .epr-cat-btn {
+                background-color: #f7f7f7;
+                border-radius: 8px;
+                padding: 6px;
+                margin: 2px;
+                transition: background-color 0.3s;
+                }
+
+                /* On hover */
+                .EmojiPickerReact .epr-category-nav .epr-cat-btn:hover {
+                background-color: #e9c695;
+                color: white;
+                }
+
+                /* Active (selected) category */
+                .EmojiPickerReact .epr-category-nav .epr-cat-btn.epr-active {
+                background-color: #d1ebd3;
+                color: #333;
+                }
+
+                            .EmojiPickerReact {
+                    --epr-bg-color: white;
+                }
+
+                .EmojiPickerReact .epr-emoji {
+                    background-color: white;
+                }
+
+                .EmojiPickerReact .epr-emoji:hover {
+                    background-color: #e9c695fe;
+                }
             .chatInfo{
                 height: 50px;
-                background-color: #5d5b8d;
+                background-color: #d1ebd3;
+;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 padding: 10px;
-                color: lightgrey;
+                color: #5c413f;
             }
             .chatIcons{
                 display: flex;
@@ -228,7 +278,7 @@ $darColor: #2f2d52;
             }
 
             .messages {
-                background-color: #ddddf7;
+                background-color: #e8f4ea;;
                 padding: 10px;
                 height: calc(100% - 160px);
                 overflow: scroll;
@@ -267,6 +317,20 @@ $darColor: #2f2d52;
                         img{
                             width: 50%;
                         }
+
+                        .clickableImage {
+                        cursor: pointer;
+                        max-width: 200px; /* preview size */
+                        border-radius: 8px;
+                        transition: transform 0.2s;
+                        }
+
+                        .clickableImage:hover {
+                        transform: scale(1.02);
+                        }
+
+
+
                     }
 
                     &.owner{
@@ -277,7 +341,7 @@ $darColor: #2f2d52;
                             align-items: flex-end;
 
                         p{
-                            background-color: #8da4f1;
+                            background-color: #b8d8be;
                             color: white;
                             border-radius: 10px 0px 10px 10px;
                         }
@@ -285,6 +349,25 @@ $darColor: #2f2d52;
                     }
                 }
             }
+            // modal appears in front of chats
+                .imageModal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1050;
+                    }
+
+                    .imageModal img {
+                    max-width: 90%;
+                    max-height: 90%;
+                    border-radius: 10px;
+                    }
         
                 .input {
                     height: 50px;
@@ -314,7 +397,7 @@ $darColor: #2f2d52;
                 gap: 10px;
       
                 img {
-                  height: 24px;
+                  height: 30px;
                   cursor: pointer;
                 }
       
@@ -322,7 +405,7 @@ $darColor: #2f2d52;
                   border: none;
                   padding: 10px 15px;
                   color: white;
-                  background-color: #8da4f1;
+                  background-color: #e9c695fe;
                   cursor: pointer;
                 }
               }
