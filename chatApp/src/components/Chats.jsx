@@ -1,6 +1,4 @@
 import React from 'react'
-import userImage from '../img/capybara-square-1.jpg.optimal.jpg'
-
 
 const Chats = () =>{
     return(
