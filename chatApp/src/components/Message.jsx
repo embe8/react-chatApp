@@ -1,4 +1,3 @@
-import userImage from '../img/capybara-square-1.jpg.optimal.jpg'
 import React, { useContext, useEffect, useRef, useState} from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
