@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import Capy from "../img/capy_logo.png";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 
