@@ -23,8 +23,8 @@ export const IMAGEKIT_CONFIG = {
           IMAGEKIT_CONFIG.urlEndpoint
         );
         
-        console.log('Original URL:', firebaseUrl);
-        console.log('Transformed URL:', transformedUrl);
+        // console.log('Original URL:', firebaseUrl);
+        //console.log('Transformed URL:', transformedUrl);
   
         return transformedUrl;
       }
