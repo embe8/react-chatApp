@@ -27,7 +27,7 @@ const handleSearch = async () => {
     } else {
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
-        console.log(doc.data);
+        //console.log(doc.data);
       });
       setErr(false); // Clear error if user is found
     }
