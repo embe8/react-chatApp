@@ -1,17 +1,29 @@
-import React from 'react'
+import React, {useEffect, useState, useContext} from 'react'
+import Cam from "../img/cam.png";
+import Add from "../img/add.png";
+import More from "../img/more.png";
+import Messages from "./Messages";
+import Input from "./Input";
+import { ChatContext } from '../context/ChatContext';
 
-const Chats = () =>{
+const Chat = () =>{
+
+    const { data } = useContext(ChatContext);
     return(
-        <div className="chats">
-             <div className="userChat">
-                <img src={userImage}></img>
-                <div className="userChatInfo">
-                    <span>Jane</span>
-                    <p>hello</p>
-                </div>
+        <div className="chat">
+        <div className="chatInfo">
+            <span>{data.user?.displayName}</span>
+            <div className="chatIcons">
+            {/* uncomment when functionality added<img src={Cam} alt=""></img>
+            <img src={Add} alt=""></img>
+            <img src={More} alt=""></img>*/}
             </div>
+          
         </div>
-    )
-}
+        <Messages/>
+        <Input/>
+        </div>
+    );
+};
 
-export default Chats
+export default Chat
