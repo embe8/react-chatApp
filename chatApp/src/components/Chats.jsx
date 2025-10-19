@@ -1,29 +1,58 @@
-import React, {useEffect, useState, useContext} from 'react'
-import Cam from "../img/cam.png";
-import Add from "../img/add.png";
-import More from "../img/more.png";
-import Messages from "./Messages";
-import Input from "./Input";
-import { ChatContext } from '../context/ChatContext';
+import { doc, onSnapshot } from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { ChatContext } from "../context/ChatContext";
+import { db } from "../firebase";
+import { Image } from '@imagekit/react';
+import { IMAGEKIT_CONFIG, extractFirebasePath, IMAGE_TRANSFORMATIONS } from '../config/imagekit';
 
-const Chat = () =>{
 
-    const { data } = useContext(ChatContext);
-    return(
-        <div className="chat">
-        <div className="chatInfo">
-            <span>{data.user?.displayName}</span>
-            <div className="chatIcons">
-            {/* uncomment when functionality added<img src={Cam} alt=""></img>
-            <img src={Add} alt=""></img>
-            <img src={More} alt=""></img>*/}
-            </div>
-          
+const Chats = () => {
+  const [chats, setChats] = useState([]);
+
+  const { currentUser } = useContext(AuthContext);
+  const { dispatch } = useContext(ChatContext);
+
+  useEffect(() => {
+    const getChats = () => {
+      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+        setChats(doc.data());
+      });
+
+      return () => {
+        unsub();
+      };
+    };
+
+    currentUser.uid && getChats();
+  }, [currentUser.uid]);
+
+  const handleSelect = (u) => {
+    dispatch({ type: "CHANGE_USER", payload: u });
+  };
+
+  return (
+    <div className="chats">
+      {Object.entries(chats)?.sort((a,b)=>b[1].date - a[1].date).map((chat) => (
+        <div
+          className="userChat"
+          key={chat[0]}
+          onClick={() => handleSelect(chat[1].userInfo)}
+        >
+              <Image
+                    urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
+                    src={extractFirebasePath(chat[1].userInfo.photoURL)}
+                    transformation={[IMAGE_TRANSFORMATIONS.avatar]}
+                    alt="RIP"
+                  />                  
+                  <div className="userChatInfo">
+            <span>{chat[1].userInfo.displayName}</span>
+            <p>{chat[1].lastMessage?.text}</p>
+          </div>
         </div>
-        <Messages/>
-        <Input/>
-        </div>
-    );
+      ))}
+    </div>
+  );
 };
 
-export default Chat
+export default Chats;
