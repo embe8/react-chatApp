@@ -5,7 +5,7 @@ import { ChatContext } from "../context/ChatContext";
 import { db } from "../firebase";
 import { Image } from '@imagekit/react';
 import { IMAGEKIT_CONFIG, extractFirebasePath, IMAGE_TRANSFORMATIONS } from '../config/imagekit';
-
+import CloseIcon from "../img/close-icon.png";
 
 const Chats = () => {
   const [chats, setChats] = useState([]);
@@ -39,20 +39,33 @@ const Chats = () => {
           key={chat[0]}
           onClick={() => handleSelect(chat[1].userInfo)}
         >
-              <Image
-                    urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
-                    src={extractFirebasePath(chat[1].userInfo.photoURL)}
-                    transformation={[IMAGE_TRANSFORMATIONS.avatar]}
-                    alt="RIP"
-                  />                  
-                  <div className="userChatInfo">
-            <span>{chat[1].userInfo.displayName}</span>
-            <p>{chat[1].lastMessage?.text}</p>
+          <Image
+            urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
+            src={extractFirebasePath(chat[1].userInfo.photoURL)}
+            transformation={[IMAGE_TRANSFORMATIONS.avatar]}
+            alt="RIP"
+          />                  
+            <div className="userChatInfo">
+              <span>{chat[1].userInfo.displayName}</span>
+                <p>{chat[1].lastMessage?.text}</p>
+                  <img src={CloseIcon} 
+                  alt="Close" 
+                  style={{width: "15px", height: "15px"}}
+                  className="close-icon"
+                  onClick={(e) => {
+                  e.stopPropagation();
+                  setChats(prev => {
+                    const newChats = { ...prev };
+                    delete newChats[chat[0]];
+                    return newChats;
+                    });
+                  }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+        );
+      };
 
 export default Chats;

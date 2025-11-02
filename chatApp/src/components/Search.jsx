@@ -3,7 +3,7 @@ import React, {useState, useContext} from 'react'
 import { collection, query, where, doc, setDoc, getDoc, getDocs, updateDoc, serverTimestamp} from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
-
+import CloseIcon from "../img/close-icon.png";
 
 const Search = () =>{
     const [username, setUsername] = useState("");
@@ -97,7 +97,17 @@ const handleSearch = async () => {
                     alt=""
                   />
                 <div className="userChatInfo">
-                    <span>{user.displayName}</span>
+                  <span>{user.displayName}</span>
+                    <img src={CloseIcon} 
+                    alt="Close" 
+                    style={{width: "15px", height: "15px"}}
+                    className="close-icon"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setUser(null);
+                        setUsername("");
+                    }}
+                />
                 </div>
             </div>}
         </div>
