@@ -30,7 +30,7 @@ $darColor: #2f2d52;
     justify-content: center;
 
     .formWrapper{
-        background-color: white;
+        background-color: #fcfcf5;
         padding: 20px 60px;
         border-radius: 10px;
         display: flex;
@@ -72,6 +72,7 @@ $darColor: #2f2d52;
                 border: none;
                 width: 250px;
                 border-bottom: 1px solid #9e6f6d;
+                background-color: #fcfcf5;
                 
                 @include mobile {
                     width: 100%;

@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, query, doc, where, setDoc, getDocs } from "firebase/firestore";
+import Capy from "../img/chat-logo.png";
 import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
@@ -110,7 +111,7 @@ const Register = () => {
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <span className="logo">CapyChat</span>
+      <img src={Capy} alt="Attached image" style={{ height: "200px", width: "200px", marginRight: "5px" }} />
         <span className="title">Register</span>
         <form onSubmit={handleSubmit}>
           <input required type="text" placeholder="display name" />
