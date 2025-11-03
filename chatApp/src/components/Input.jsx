@@ -93,15 +93,28 @@ const Input = () => {
       // Update last message text
       const lastMessageText = text || (img ? "📷 Image" : "📎 File");
 
-      await updateDoc(doc(db, "userChats", currentUser.uid), {
-        [data.chatId + ".lastMessage"]: { text: lastMessageText },
-        [data.chatId + ".date"]: serverTimestamp(),
-      });
+      // Only update userChats if the user is not chatting with themselves
+      if (data.user.uid !== currentUser.uid) {
+        await updateDoc(doc(db, "userChats", currentUser.uid), {
+          [data.chatId + ".lastMessage"]: { text: lastMessageText },
+          [data.chatId + ".date"]: serverTimestamp(),
+          [data.chatId + ".userInfo"]: {
+            uid: data.user.uid,
+            displayName: data.user.displayName,
+            photoURL: data.user.photoURL
+          }
+        });
 
-      await updateDoc(doc(db, "userChats", data.user.uid), {
-        [data.chatId + ".lastMessage"]: { text: lastMessageText },
-        [data.chatId + ".date"]: serverTimestamp(),
-      });
+        await updateDoc(doc(db, "userChats", data.user.uid), {
+          [data.chatId + ".lastMessage"]: { text: lastMessageText },
+          [data.chatId + ".date"]: serverTimestamp(),
+          [data.chatId + ".userInfo"]: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL
+          }
+        });
+      }
 
       // Reset inputs
       setText("");
