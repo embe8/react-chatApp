@@ -4,6 +4,9 @@
 
 A modern, real-time chat application built with React and Firebase. Connect with friends and family through instant messaging with support for text, images, files, and emojis.
 
+- [React Web Chat Application](https://www.capychat.eebon.com/) - click to see deployed app
+
+
 ![React](https://img.shields.io/badge/React-18.2.0-blue)
 ![Firebase](https://img.shields.io/badge/Firebase-10.7.2-orange)
 ![Vite](https://img.shields.io/badge/Vite-4.3.2-purple)
