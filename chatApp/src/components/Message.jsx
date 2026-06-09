@@ -44,7 +44,7 @@ const Message = ({message}) =>{
     const [isTyping, setIsTyping] = useState(false);
 
     useEffect(() => {
-        if (message.senderId === "capychat-ai") {
+        if (message.senderId === "capychat-ai" && message.text === "") {
             setIsTyping(true);
             setTimeout(() => {
                 setIsTyping(false);
