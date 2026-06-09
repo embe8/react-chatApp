@@ -35,7 +35,7 @@ $darColor: #2f2d52;
         border-radius: 10px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 4px;
         align-items: center;
         
         @include mobile {
@@ -47,6 +47,10 @@ $darColor: #2f2d52;
             color: #5c413f;
             font-weight: bold;
             font-size: 24px;
+
+            img {
+                display: block;
+            }
             
             @include mobile {
                 font-size: 20px;
@@ -56,6 +60,7 @@ $darColor: #2f2d52;
         .title{
             color: #9e6f6d;
             font-size: 12px;
+            margin-top: -10px;
         }
 
         form{
@@ -115,7 +120,7 @@ $darColor: #2f2d52;
         p{
             color:#9e6f6d;
             font-size: 12px;
-            margin-top: 10px;
+            margin-top: 0px;
 
             a{
                 color: #5c413f;
