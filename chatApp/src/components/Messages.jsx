@@ -6,9 +6,14 @@ import { db } from "../firebase";
 
 const Messages = () =>{
     const [messages, setMessages] = useState([]);
-    const { data } = useContext(ChatContext);
+    const { data, aiMessages } = useContext(ChatContext);
+    const listToRender = data.isAI ? aiMessages : messages;
+
 
     useEffect(()=>{
+
+        if (data.isAI || data.chatId === "null") return;
+
         const unSub = onSnapshot(doc(db,"chats", data.chatId), (doc)=>{
             doc.exists() && setMessages(doc.data().messages);
         });
@@ -17,11 +22,11 @@ const Messages = () =>{
         return ()=>{
             unSub()
         }
-    },[data.chatId])
+    },[data.chatId, data.isAI])
 
     return(
         <div className='messages'>
-            {messages.map((m) =>(
+            {listToRender?.map((m) =>(
 
                 <Message message={m} key={m.id}/>
             ))}

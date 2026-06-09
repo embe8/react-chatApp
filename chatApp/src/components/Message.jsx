@@ -41,6 +41,16 @@ function formatTimestamp(timestamp) {
 const Message = ({message}) =>{
     const {currentUser} = useContext(AuthContext);
     const {data} = useContext(ChatContext);
+    const [isTyping, setIsTyping] = useState(false);
+
+    useEffect(() => {
+        if (message.senderId === "capychat-ai") {
+            setIsTyping(true);
+            setTimeout(() => {
+                setIsTyping(false);
+            }, 1000);
+        }
+    }, [message]);
 
     const ref = useRef();
 
@@ -53,7 +63,7 @@ const Message = ({message}) =>{
     return(
         <div 
         ref={ref}
-        className={`message ${message.senderId === currentUser.uid && "owner"}`}>
+        className={`message ${message.senderId === currentUser.uid ? "owner" : ""} ${message.senderId === "capychat-ai" ? "ai" : ""}`}>
             <div className='messageInfo'>
                 <Image
                   urlEndpoint={IMAGEKIT_CONFIG.urlEndpoint}
@@ -119,6 +129,13 @@ const Message = ({message}) =>{
                         <img src={enlargedImage} alt="Enlarged image" />
                       </div>
                     )}
+                    {isTyping && (
+  <div className="message ai">
+    <div className="messageContent">
+      <p className="typing">CapyChat AI is typing...</p>
+    </div>
+  </div>
+)}
         </div>
     );
 };

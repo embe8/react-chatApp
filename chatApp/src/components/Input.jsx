@@ -30,7 +30,7 @@ const Input = () => {
   const [showPicker, setShowPicker] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
-  const { data } = useContext(ChatContext);
+  const { data, aiMessages, setAiMessages} = useContext(ChatContext);
 
   useEffect(() => {
   const handleKeyDown = (e) => {
@@ -48,6 +48,28 @@ const Input = () => {
 
 
   const handleSend = async () => {
+    if (!text.trim() && !img && !file) return;
+  if (data.isAI) {
+    const userMsg = {
+      id: uuid(),
+      text: text.trim(),
+      senderId: currentUser.uid,
+    };
+    setAiMessages((prev) => [...prev, userMsg]);
+    setText("");
+    // Mock AI reply (replace with OpenAI later)
+    setTimeout(() => {
+      setAiMessages((prev) => [
+        ...prev,
+        {
+          id: uuid(),
+          text: "This is a mock reply from CapyChat AI.",
+          senderId: "capychat-ai",
+        },
+      ]);
+    }, 1000);
+    return;
+  }
     const messageId = uuid();
     const messageObj = {
       id: messageId,
