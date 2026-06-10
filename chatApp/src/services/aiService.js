@@ -1,5 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { formatMessages } from "../utils/formatMessages";
 
 export async function fetchChats(chatId) {
     const docSnap = await getDoc(doc(db, "chats", chatId));
@@ -19,8 +20,8 @@ export async function sendToAI(messages) {
 }
 
 export async function summarizeChat(chatId, currentUser, otherUser) {
-    const messages = await fetchHumanChat(chatId);
-    const chatHistory = formatChats(messages, currentUser, otherUser);
+    const messages = await fetchChats(chatId);
+    const chatHistory = formatMessages(messages, currentUser, otherUser);
   
     const res = await fetch("/api/ai/summarize", {
       method: "POST",

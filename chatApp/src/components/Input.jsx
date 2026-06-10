@@ -22,18 +22,6 @@ import EmojiPicker from "emoji-picker-react";
 import { useEffect } from "react";
 import { sendToAI } from "../services/aiService";
 
-export async function summarizeChat(chatId, currentUser, otherUser) {
-  const messages = await fetchHumanChat(chatId);
-  const chatHistory = formatChats(messages, currentUser, otherUser);
-
-  const res = await fetch("/api/ai/summarize", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chatHistory }),
-  });
-  return (await res.json()).summary;
-}
-
 
 const Input = () => {
   const [text, setText] = useState("");
@@ -85,8 +73,8 @@ const Input = () => {
       },
     ]);
   } catch (error) {
+    console.error("AI error:", error)
     // Mock AI reply (replace with OpenAI later)
-    setTimeout(() => {
       setAiMessages((prev) => [
         ...prev,
         {
@@ -95,10 +83,10 @@ const Input = () => {
           senderId: "capychat-ai",
         },
       ]);
-    }, 1000);
+    }
     return;
   }
-}
+
     const messageId = uuid();
     const messageObj = {
       id: messageId,

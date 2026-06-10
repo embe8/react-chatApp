@@ -4,3 +4,4 @@ export const CAPYCHAT_AI = {
     photoURL: "/src/img/chat-logo.png", 
     isAI: true,
   };
+  
