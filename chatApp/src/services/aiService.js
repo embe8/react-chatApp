@@ -30,3 +30,15 @@ export async function summarizeChat(chatId, currentUser, otherUser) {
     });
     return (await res.json()).summary;
   }
+
+// for context ai chatting
+export async function askAboutChats(question, currentUserId) {
+  const res = await fetch("api/ai/ask-chats", {
+    method: "POST",
+    headers: { "Content-Type": "application/json"},
+    body: JSON.stringify({ question, currentUserId }),
+  });
+  if (!res.ok) throw new Error("AI request failed");
+  const data = await res.json();
+  return data.reply;
+}
