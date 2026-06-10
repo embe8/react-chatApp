@@ -20,7 +20,19 @@ import {
 } from "firebase/storage";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect } from "react";
+import { sendToAI } from "../services/aiService";
 
+export async function summarizeChat(chatId, currentUser, otherUser) {
+  const messages = await fetchHumanChat(chatId);
+  const chatHistory = formatChats(messages, currentUser, otherUser);
+
+  const res = await fetch("/api/ai/summarize", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chatHistory }),
+  });
+  return (await res.json()).summary;
+}
 
 
 const Input = () => {
@@ -47,6 +59,7 @@ const Input = () => {
 }, []);
 
 
+
   const handleSend = async () => {
     if (!text.trim() && !img && !file) return;
   if (data.isAI) {
@@ -55,8 +68,23 @@ const Input = () => {
       text: text.trim(),
       senderId: currentUser.uid,
     };
-    setAiMessages((prev) => [...prev, userMsg]);
-    setText("");
+  // 1. Show user message immediately
+  const updatedMessages = [...aiMessages, userMsg];
+  setAiMessages(updatedMessages);
+  setText("");
+    try {
+
+      const replyText = await sendToAI(updatedMessages);
+    
+    setAiMessages((prev) => [
+      ...prev,
+      {
+        id: uuid(),
+        text: replyText,
+        senderId: "capychat-ai",
+      },
+    ]);
+  } catch (error) {
     // Mock AI reply (replace with OpenAI later)
     setTimeout(() => {
       setAiMessages((prev) => [
@@ -70,6 +98,7 @@ const Input = () => {
     }, 1000);
     return;
   }
+}
     const messageId = uuid();
     const messageObj = {
       id: messageId,
