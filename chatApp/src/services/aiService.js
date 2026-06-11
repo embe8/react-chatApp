@@ -33,7 +33,7 @@ export async function summarizeChat(chatId, currentUser, otherUser) {
 
 // for context ai chatting
 export async function askAboutChats(question, currentUserId) {
-  const res = await fetch("api/ai/ask-chats", {
+  const res = await fetch("/api/ai/ask-chats", {
     method: "POST",
     headers: { "Content-Type": "application/json"},
     body: JSON.stringify({ question, currentUserId }),

@@ -20,7 +20,7 @@ import {
 } from "firebase/storage";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect } from "react";
-import { sendToAI } from "../services/aiService";
+import { askAboutChats, sendToAI } from "../services/aiService";
 
 
 const Input = () => {
@@ -62,7 +62,7 @@ const Input = () => {
   setText("");
     try {
 
-      const replyText = await sendToAI(updatedMessages);
+      const replyText = await askAboutChats(text.trim(), currentUser.uid);
     
     setAiMessages((prev) => [
       ...prev,
