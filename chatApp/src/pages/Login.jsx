@@ -26,7 +26,7 @@ const Login = () => {
         <span className="logo">   <span role="img" aria-label="file">
                   <img src={Capy} alt="Attached image" style={{ height: "200px", width: "200px", marginRight: "5px" }} />
                 </span></span>
-        <span className="title">Login</span>
+        <span className="title">Welcome Back</span>
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="email" />
           <input type="password" placeholder="password" />

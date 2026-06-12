@@ -55,6 +55,7 @@ const Input = () => {
       id: uuid(),
       text: text.trim(),
       senderId: currentUser.uid,
+
     };
   // 1. Show user message immediately
   const updatedMessages = [...aiMessages, userMsg];
