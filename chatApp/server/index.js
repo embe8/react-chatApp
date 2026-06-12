@@ -1,17 +1,19 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import serviceAccount from "./serviceAccountKey.json" with { type: "json" };
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const app = express();
 const PORT = 3001;
-
-
 
 initializeApp({
   credential: cert(serviceAccount),
@@ -26,16 +28,13 @@ app.post("/api/ai/chat", async (req, res) => {
   try {
     const { messages } = req.body;
 
-    // Gemini uses "model" and "parts" instead of "role/content"
     const geminiMessages = messages.map((m) => ({
       role: m.senderId === "capychat-ai" ? "model" : "user",
       parts: [{ text: m.text }],
     }));
 
-
-
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,7 +66,6 @@ app.post("/api/ai/ask-chats", async (req, res) => {
   try {
     const { question, currentUserId } = req.body;
 
-    // 1. Fetch userChats to get all chatIds + other user names
     const userChatsSnap = await adminDb
       .collection("userChats")
       .doc(currentUserId)
@@ -80,7 +78,6 @@ app.post("/api/ai/ask-chats", async (req, res) => {
     const userChatsData = userChatsSnap.data();
     const chatIds = Object.keys(userChatsData);
 
-    // 2. Fetch all messages for each chat
     const allChats = await Promise.all(
       chatIds.map(async (chatId) => {
         const chatSnap = await adminDb
@@ -94,7 +91,6 @@ app.post("/api/ai/ask-chats", async (req, res) => {
       })
     );
 
-    // 3. Format chats as plain text
     const context = allChats.map(chat => {
       const msgs = chat.messages
         .map(m => `${m.senderId === currentUserId ? "Me" : chat.otherUser}: ${m.text}`)
@@ -102,9 +98,8 @@ app.post("/api/ai/ask-chats", async (req, res) => {
       return `--- Chat with ${chat.otherUser} ---\n${msgs}`;
     }).join("\n\n");
 
-    // 4. Send to Gemini with context
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -121,6 +116,12 @@ app.post("/api/ai/ask-chats", async (req, res) => {
     );
 
     const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      return res.status(500).json({ error: data.error?.message || "Gemini error" });
+    }
+
     const reply = data.candidates[0].content.parts[0].text;
     res.json({ reply });
 
@@ -130,6 +131,13 @@ app.post("/api/ai/ask-chats", async (req, res) => {
   }
 });
 
+// Serve the React build files
+app.use(express.static(path.join(__dirname, "../dist")));
+
+// For any non-API route, send back index.html (so React Router works)
+app.get("/*splat", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`AI server running on http://localhost:${PORT}`);
