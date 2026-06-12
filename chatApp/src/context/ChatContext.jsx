@@ -60,8 +60,14 @@ import {
     // Reset chat context when user changes
     useEffect(() => {
       if (currentUser) {
-        // Reset to initial state when a new user logs in
         dispatch({ type: "RESET_CHAT" });
+        setAiMessages([
+          {
+            id: "welcome",
+            text: "Hi! I'm CapyChat AI. How can I help?",
+            senderId: "capychat-ai",
+          },
+        ]);
       }
     }, [currentUser?.uid]);
   
