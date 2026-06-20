@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AuthContext } from "../context/AuthContext";
 import { collection, query, where, doc, setDoc, getDoc, getDocs, updateDoc, serverTimestamp} from "firebase/firestore";
 import { db } from "../firebase";
+import { text } from 'express';
 
 
 const chatSearch = () => {
@@ -33,7 +34,26 @@ const chatSearch = () => {
         } catch(err) {
             setErr(true);
         }
+
+        const handleKey = (e) => {
+            e.code = "Enter" && handleSearch();
+
+        };
+
+        return(
+            <div className='chatSearch'><div className='chatSearchForm'>
+                    <input 
+           type="text" 
+           placeholder='search...' 
+           onKeyDown={handleKey} 
+           onChange={(e) => setChats(e.target.value)} 
+           value={text}/>
+            </div>
+
+            </div>
+
+        )
     };
 
 
-export default chatSearch;
+export default chatSearch
