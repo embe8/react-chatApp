@@ -63,7 +63,8 @@ const Input = () => {
   setText("");
     try {
 
-      const replyText = await askAboutChats(text.trim(), currentUser.uid);
+      //const replyText = await askAboutChats(text.trim(), currentUser.uid);
+      const replyText = await sendToAI(updatedMessages);
     
     setAiMessages((prev) => [
       ...prev,
