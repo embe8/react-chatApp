@@ -5,12 +5,14 @@ import More from "../img/more.png";
 import Messages from "./Messages";
 import Input from "./Input";
 import { ChatContext } from '../context/ChatContext';
+import ChatSearch from './ChatSearch.jsx';
 
 const Chat = () =>{
 
     const { data } = useContext(ChatContext);
     return(
         <div className="chat">
+            <ChatSearch />
         <div className="chatInfo">
             <span>{data.user?.displayName}</span>
             <div className="chatIcons">

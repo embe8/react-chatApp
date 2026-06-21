@@ -5,6 +5,7 @@ import Chats from './Chats';
 import CapyLogo from "../img/chat-logo.png";
 import { ChatContext } from "../context/ChatContext";
 import { useContext, useState } from "react";
+import ChatSearch from "./ChatSearch.jsx";
 
 
 
@@ -17,6 +18,8 @@ const Sidebar = () =>{
         <div className="sidebar">
             <Navbar/>
             <Search/>
+            <ChatSearch />
+
             <div className="userChat aiChat" onClick={() => handleSelectAI()}>
                 <img src={CapyLogo} alt="CapyChat AI" />
                 <div className="userChatInfo">
